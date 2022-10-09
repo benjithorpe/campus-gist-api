@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const studentSchema = mongoose.Schema({
+const studentSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -46,6 +46,11 @@ const studentSchema = mongoose.Schema({
     default: false,
   },
   gists: [mongoose.Types.ObjectId],
+
+  // gists: {
+  //   type: mongoose.Types.ObjectId,
+  //   default: [],
+  // },
 });
 
 module.exports = mongoose.model('Student', studentSchema);

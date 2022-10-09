@@ -9,34 +9,16 @@ const Student = require('../models/Student.js');
 // } = require('../utils/validation.js');
 
 router.post('/register', async (req, res) => {
-  // Validate User data
-  // const { error } = userRegisterSchema.validate(req.body);
-  // if (error) return res.status(400).json({ message: error.details[0].message });
-  console.log(req.body);
-  // Check if user(email) already exists
-  // const emailExists = await Student.findOne({ email: req.body.email });
-  // if (emailExists) {
-  //   return res.status(400).json({ message: 'Email already exists!' });
-  // }
+  // Create the new student
+  const student = new Student(req.body);
 
-  // Hash the user password
-  // const passwordSalt = await bcrypt.genSalt(10);
-  // const hashedPassword = await bcrypt.hash(req.body.password, passwordSalt);
-
-  // Create the new user
-  // const user = new Student({
-  //   name: req.body.name,
-  //   email: req.body.email,
-  //   password: hashedPassword,
-  // });
-
-  // Add the user to the database
-  // try {
-  //   const newUser = await user.save();
-  //   res.json({ user: newUser._id });
-  // } catch (error) {
-  //   res.status(404).json({ message: error });
-  // }
+  // Add the student to the database
+  try {
+    const newStudent = await student.save();
+    res.json({ student: newStudent });
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
 });
 
 // router.post('/login', async (req, res) => {

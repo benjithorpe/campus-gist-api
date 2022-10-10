@@ -1,7 +1,6 @@
 import { Router } from 'express';
-// const bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
 // const jwt = require('jsonwebtoken');
-
 import Student from '../models/Student.js';
 import { registerValidation, loginValidation } from '../utils/validate.js';
 
@@ -22,13 +21,17 @@ router.post('/register', async (req, res) => {
   if (usernameExists)
     return res.status(400).json({ error: 'Username already exists!' });
 
+  // Generate salt and Hash the plain password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
   // Create the new student
   const student = new Student({
     name: req.body.name,
     username: req.body.username,
     email: req.body.email,
     institution: req.body.institution,
-    password: req.body.password,
+    password: hashedPassword,
   });
 
   // Add the student to the database

@@ -1,8 +1,7 @@
-import express, { json } from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { connect } from 'mongoose';
-
 import studentRoutes from './routes/students.js';
 import gistRoutes from './routes/gists.js';
 import authRoutes from './routes/auth.js';
@@ -15,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 connect(process.env.DATABASE_URL, () => console.log('Connected...'));
 
 // Middlewares
-app.use(json());
+app.use(express.json());
 app.use(cors({ origin: '*' }));
 
 // Routes Middlewares

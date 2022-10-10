@@ -25,6 +25,7 @@ const studentSchema = new Schema({
   },
   institution: {
     type: String,
+    default: 'Other',
     required: true,
   },
   bio: {

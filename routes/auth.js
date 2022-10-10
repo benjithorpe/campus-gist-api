@@ -3,16 +3,33 @@ import { Router } from 'express';
 // const jwt = require('jsonwebtoken');
 
 import Student from '../models/Student.js';
-// const {
-//   userLoginSchema,
-//   userRegisterSchema,
-// } = require('../utils/validation.js');
+import { registerStudentValidation } from '../utils/validate.js';
 
 const router = Router();
 
 router.post('/register', async (req, res) => {
+  // Validate student registration details
+  const { error } = registerStudentValidation.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+
+  // Check if email already exists
+  const emailExists = await Student.findOne({ email: req.body.email });
+  if (emailExists)
+    return res.status(400).json({ message: 'Email already exists!' });
+
+  // Check if username already exists
+  const usernameExists = await Student.findOne({ username: req.body.username });
+  if (usernameExists)
+    return res.status(400).json({ message: 'Username already exists!' });
+
   // Create the new student
-  const student = new Student(req.body);
+  const student = new Student({
+    name: req.body.name,
+    username: req.body.username,
+    email: req.body.email,
+    institution: req.body.institution,
+    password: req.body.password,
+  });
 
   // Add the student to the database
   try {

@@ -1,19 +1,31 @@
 import { Router } from 'express';
 
-// import Student from '../models/Student.js';
+import Gist from '../models/Gist.js';
 
 const router = Router();
 
-// Get all students
+// Get all gists
 router.get('/', async (req, res) => {
-  // const students = await Gist.find();
+  const gists = await Gist.find();
 
-  // if (!students) return res.send({ error: 'No gists found' });
+  if (!gists) return res.send({ error: 'No gists found' });
 
-  res.send({ gists: 'hey gists' });
+  res.send({ gists });
 });
 
-// Get a specific student
+// Create new gist
+router.post('/', async (req, res) => {
+  const gist = new Gist(req.body);
+
+  try {
+    const saved = await gist.save();
+    res.send(saved);
+  } catch (error) {
+    res.status(400).send({ error });
+  }
+});
+
+// Get a gist
 router.get('/:id', async (req, res) => {
   // const student = await Student.findById(req.params.id);
 
@@ -24,7 +36,7 @@ router.get('/:id', async (req, res) => {
   res.send({ gists: 'hey gists id' });
 });
 
-// Update Student details
+// Update gist
 router.put('/:id', async (req, res) => {
   // const student = await Student.findById(req.params.id);
 
@@ -50,7 +62,7 @@ router.put('/:id', async (req, res) => {
   res.send({ gists: 'hey gists update' });
 });
 
-// Delete a student
+// Delete gist
 router.delete('/:id', async (req, res) => {
   // try {
   //   await Student.deleteOne({ _id: req.params.id });

@@ -17,9 +17,9 @@ router.post('/register', async (req, res) => {
   // Add the student to the database
   try {
     const newStudent = await student.save();
-    res.json({ student: newStudent });
+    res.send({ student: newStudent });
   } catch (error) {
-    res.status(400).json({ message: error });
+    res.status(400).send({ error });
   }
 });
 

@@ -3,24 +3,24 @@ import { Router } from 'express';
 // const jwt = require('jsonwebtoken');
 
 import Student from '../models/Student.js';
-import { registerStudentValidation } from '../utils/validate.js';
+import { registerValidation, loginValidation } from '../utils/validate.js';
 
 const router = Router();
 
 router.post('/register', async (req, res) => {
   // Validate student registration details
-  const { error } = registerStudentValidation.validate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  const { error } = registerValidation.validate(req.body);
+  if (error) return res.status(400).json({ error: error.details[0].message });
 
   // Check if email already exists
   const emailExists = await Student.findOne({ email: req.body.email });
   if (emailExists)
-    return res.status(400).json({ message: 'Email already exists!' });
+    return res.status(400).json({ error: 'Email already exists!' });
 
   // Check if username already exists
   const usernameExists = await Student.findOne({ username: req.body.username });
   if (usernameExists)
-    return res.status(400).json({ message: 'Username already exists!' });
+    return res.status(400).json({ error: 'Username already exists!' });
 
   // Create the new student
   const student = new Student({
@@ -36,26 +36,32 @@ router.post('/register', async (req, res) => {
     const newStudent = await student.save();
     res.send({ student: newStudent });
   } catch (error) {
-    res.status(400).send({ error });
+    res.status(400).send(error);
   }
 });
 
-// router.post('/login', async (req, res) => {
-//   // Validate Student data
-//   const { error } = userLoginSchema.validate(req.body);
-//   if (error) return res.status(400).json({ message: error.details[0].message });
+router.post('/login', async (req, res) => {
+  // Validate Student login details
+  const { error } = loginValidation.validate(req.body);
+  if (error) return res.status(400).json({ error: error.details[0].message });
 
-//   // Check if user has an account
-//   const user = await Student.findOne({ email: req.body.email });
-//   if (!user) return res.json({ message: 'Email does not exists!' });
+  // Check if student has an account
+  const student = await Student.findOne({ email: req.body.email });
+  if (!student)
+    return res.json({ message: 'Invalid email or password Password!!' });
 
-//   // Compare the password
-//   const validPassword = await bcrypt.compare(req.body.password, user.password);
-//   if (!validPassword) return res.json({ message: 'Password is not correct!' });
+  // Check if student password is correct
+  if (student.password !== req.body.password)
+    return res.json({ message: 'Invalid email and password Password!' });
 
-//   // Create and assign new JWT to the user
-//   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
-//   res.header('auth-token', token).send(token);
-// });
+  res.send(student);
+  // // Compare the password
+  // const validPassword = await bcrypt.compare(req.body.password, user.password);
+  // if (!validPassword) return res.json({ message: 'Password is not correct!' });
+
+  // Create and assign new JWT to the user
+  // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+  // res.header('auth-token', token).send(token);
+});
 
 export default router;

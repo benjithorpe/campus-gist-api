@@ -4,6 +4,7 @@ import cors from 'cors';
 import { connect } from 'mongoose';
 
 import studentRoutes from './routes/students.js';
+import gistRoutes from './routes/gists.js';
 import authRoutes from './routes/auth.js';
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(cors({ origin: '*' }));
 // Routes Middlewares
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
+app.use('/api/gists', gistRoutes);
 
 // Normal/Documentation Routes
 app.get('/', (req, res) => res.json({ message: 'hello world!' }));

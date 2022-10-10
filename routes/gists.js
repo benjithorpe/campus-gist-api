@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
   if (!gists) return res.send({ error: 'No gists found' });
 
-  res.send({ gists });
+  res.send(gists);
 });
 
 // Create new gist
@@ -21,56 +21,48 @@ router.post('/', async (req, res) => {
     const saved = await gist.save();
     res.send(saved);
   } catch (error) {
-    res.status(400).send({ error });
+    res.status(400).send(error);
   }
 });
 
 // Get a gist
 router.get('/:id', async (req, res) => {
-  // const student = await Student.findById(req.params.id);
+  const gist = await Gist.findById(req.params.id);
 
-  // // Return Error if no student was found...
-  // if (!student) return res.send({ error: 'Student was not found' });
+  // Return Error if no gist was found...
+  if (!gist) return res.send({ error: 'Gist was not found' });
 
-  // res.send(student);
-  res.send({ gists: 'hey gists id' });
+  res.send(gist);
 });
 
 // Update gist
 router.put('/:id', async (req, res) => {
-  // const student = await Student.findById(req.params.id);
+  const gist = await Gist.findById(req.params.id);
 
-  // if (!student) return res.send({ error: 'No student was found.' });
+  if (!gist) return res.send({ error: 'No gist was found.' });
 
-  // // Get the data from the request body
-  // const { name, username, email, institution, password, bio } = req.body;
+  // Get the data from the request body
+  const { content } = req.body;
 
-  // // Update the student details
-  // if (name) student.name = name;
-  // if (username) student.username = username;
-  // if (email) student.email = email;
-  // if (password) student.password = password;
-  // if (bio) student.bio = bio;
-  // if (institution) student.institution = institution;
+  // Update the gist conyent
+  if (content) gist.content = content;
 
-  // try {
-  //   const saved = await student.save();
-  //   res.send(saved);
-  // } catch (error) {
-  //   res.status(400).send({ error });
-  // }
-  res.send({ gists: 'hey gists update' });
+  try {
+    const saved = await gist.save();
+    res.send(saved);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 // Delete gist
 router.delete('/:id', async (req, res) => {
-  // try {
-  //   await Student.deleteOne({ _id: req.params.id });
-  //   res.send({ message: 'Student has been deleted...' });
-  // } catch (error) {
-  //   res.status(400).send({ error });
-  // }
-  res.send({ gists: 'hey gists delete' });
+  try {
+    await Gist.deleteOne({ _id: req.params.id });
+    res.send({ message: 'Gist has been deleted...' });
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 export default router;

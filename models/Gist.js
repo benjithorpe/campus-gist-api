@@ -9,10 +9,11 @@ const gistSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  likes: {
-    type: Number,
-    default: 0,
-  },
+  // likes: {
+  //   type: Number,
+  //   default: 0,
+  // },
+  // likedBy: [Types.ObjectId],
   author: {
     type: Types.ObjectId,
     required: true,

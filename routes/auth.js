@@ -54,13 +54,14 @@ router.post('/login', async (req, res) => {
     return res.json({ message: 'Invalid email or password Password!!' });
 
   // Check if student password is correct
-  if (student.password !== req.body.password)
+  const validPassword = await bcrypt.compare(
+    req.body.password,
+    student.password,
+  );
+  if (!validPassword)
     return res.json({ message: 'Invalid email and password Password!' });
 
   res.send(student);
-  // // Compare the password
-  // const validPassword = await bcrypt.compare(req.body.password, user.password);
-  // if (!validPassword) return res.json({ message: 'Password is not correct!' });
 
   // Create and assign new JWT to the user
   // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);

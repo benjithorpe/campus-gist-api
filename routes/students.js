@@ -1,41 +1,33 @@
-const router = require('express').Router();
+import { Router } from 'express';
 
-const { students } = require('../utils/data.js');
-const Student = require('../models/Student.js');
+import Student from '../models/Student.js';
+
+const router = Router();
 
 router.get('/', async (req, res) => {
+  const students = await Student.find();
+
+  if (!students) return res.send({ error: 'No students found' });
+
   res.send(students);
 });
 
-router.get('/:id', (req, res) => {
-  const student = students.find((student) => student.id === req.params.id * 1);
+router.get('/:id', async (req, res) => {
+  const student = await Student.findById(req.params.id);
 
-  if (student) return res.send(student);
-  res.send({ error: 'Student was not found' });
+  // Return Error if no student was found...
+  if (!student) return res.send({ error: 'Student was not found' });
+
+  res.send(student);
 });
 
-router.post('/', (req, res) => {
-  const newStudent = {
-    id: students[students.length - 1].id + 1,
-    name: req.body.name,
-    username: req.body.username,
-    email: req.body.email,
-    picture: 'https://randomuser.me/api/portraits/med/men/60.jpg',
-    phone: '1-463-123-4447',
-    institute: {
-      name: 'BlueCrest College',
-      abbreviation: 'BCC',
-    },
-  };
-  students.push(newStudent);
-  res.send(students);
+router.put('/:id', (req, res) => {
+  res.send(req.body);
 });
 
-router.put('/:id', (req, res) => res.send(students));
-
-router.delete('/:id', (req, res) => {
-  const newStudents = students.filter((st) => st.id !== req.params.id * 1);
-  res.send(newStudents);
+router.delete('/:id', async (req, res) => {
+  const deleted = Student.findByIdAndDelete(req.params.id);
+  res.send(deleted);
 });
 
-module.exports = router;
+export default router;

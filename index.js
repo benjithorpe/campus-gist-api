@@ -1,19 +1,20 @@
-const express = require('express');
-require('dotenv').config();
-const cors = require('cors');
-const mongoose = require('mongoose');
+import express, { json } from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import { connect } from 'mongoose';
 
-const studentRoutes = require('./routes/students.js');
-const authRoutes = require('./routes/auth.js');
+import studentRoutes from './routes/students.js';
+import authRoutes from './routes/auth.js';
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Connect to DB
-mongoose.connect(process.env.DATABASE_URL, () => console.log('Connected...'));
+connect(process.env.DATABASE_URL, () => console.log('Connected...'));
 
 // Middlewares
-app.use(express.json());
+app.use(json());
 app.use(cors({ origin: '*' }));
 
 // Routes Middlewares

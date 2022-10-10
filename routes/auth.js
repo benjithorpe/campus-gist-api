@@ -1,12 +1,14 @@
-const router = require('express').Router();
+import { Router } from 'express';
 // const bcrypt = require('bcryptjs');
 // const jwt = require('jsonwebtoken');
 
-const Student = require('../models/Student.js');
+import Student from '../models/Student.js';
 // const {
 //   userLoginSchema,
 //   userRegisterSchema,
 // } = require('../utils/validation.js');
+
+const router = Router();
 
 router.post('/register', async (req, res) => {
   // Create the new student
@@ -39,4 +41,4 @@ router.post('/register', async (req, res) => {
 //   res.header('auth-token', token).send(token);
 // });
 
-module.exports = router;
+export default router;

@@ -7,8 +7,6 @@ import { registerValidation, loginValidation } from '../utils/validate.js';
 const router = Router();
 
 router.post('/register', async (req, res) => {
-  console.log(req.body);
-
   // Validate student registration details
   const { error } = registerValidation.validate(req.body);
   if (error) return res.json({ error: error.details[0].message });

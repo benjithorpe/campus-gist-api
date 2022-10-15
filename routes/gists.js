@@ -6,7 +6,9 @@ const router = Router();
 
 // Get all gists
 router.get('/', async (req, res) => {
-  const gists = await Gist.find();
+  const gists = await Gist.find()
+    .populate('author', 'fullname username image')
+    .sort('-datePosted');
 
   if (!gists) return res.send({ error: 'No gists found' });
 
@@ -27,7 +29,10 @@ router.post('/', async (req, res) => {
 
 // Get a gist
 router.get('/:id', async (req, res) => {
-  const gist = await Gist.findById(req.params.id);
+  const gist = await Gist.findById(req.params.id).populate(
+    'author',
+    'fullname username image',
+  );
 
   // Return Error if no gist was found...
   if (!gist) return res.send({ error: 'Gist was not found' });
@@ -37,11 +42,13 @@ router.get('/:id', async (req, res) => {
 
 // Update gist
 router.put('/:id', async (req, res) => {
-  const gist = await Gist.findById(req.params.id);
+  const gist = await Gist.findById(req.params.id).populate(
+    'author',
+    'fullname username image',
+  );
 
   if (!gist) return res.send({ error: 'No gist was found.' });
-
-  // Get the data from the request body
+  // Get the content from the request body
   const { content } = req.body;
 
   // Update the gist conyent
@@ -59,7 +66,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     await Gist.deleteOne({ _id: req.params.id });
-    res.send({ message: 'Gist has been deleted...' });
+    res.send({ message: 'Gist was deleted...' });
   } catch (error) {
     res.status(400).send(error);
   }

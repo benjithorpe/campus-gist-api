@@ -1,15 +1,17 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const studentSchema = new Schema({
   fullname: {
     type: String,
     required: true,
+    trim: true,
     min: 4,
     max: 200,
   },
   username: {
     type: String,
     required: true,
+    trim: true,
     min: 2,
     max: 20,
   },
@@ -20,6 +22,7 @@ const studentSchema = new Schema({
   email: {
     type: String,
     required: true,
+    trim: true,
     min: 6,
     max: 255,
   },
@@ -27,6 +30,7 @@ const studentSchema = new Schema({
     type: String,
     default: 'Other',
     required: true,
+    trim: true,
   },
   bio: {
     type: String,
@@ -46,7 +50,7 @@ const studentSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  gists: [Types.ObjectId],
+  gists: [{ type: Schema.Types.ObjectId, ref: 'Gist' }],
 });
 
 export default model('Student', studentSchema);

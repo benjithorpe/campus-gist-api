@@ -1,4 +1,4 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const gistSchema = new Schema({
   content: {
@@ -13,12 +13,12 @@ const gistSchema = new Schema({
   //   type: Number,
   //   default: 0,
   // },
-  // likedBy: [Types.ObjectId],
+  // likedBy: [Schema.Types.ObjectId],
   author: {
-    type: Types.ObjectId,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: 'Student',
   },
-  comments: [Types.ObjectId],
+  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
 });
 
 export default model('Gist', gistSchema);

@@ -41,6 +41,7 @@ router.put('/:id', async (req, res) => {
   if (institution) student.institution = institution;
 
   try {
+    // Save the new details for the student
     const saved = await student.save();
     res.send(saved);
   } catch (error) {

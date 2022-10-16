@@ -19,6 +19,8 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const gist = new Gist(req.body);
 
+  // TODO: get the current author and save it as the gist's author
+
   try {
     const saved = await gist.save();
     res.send(saved);

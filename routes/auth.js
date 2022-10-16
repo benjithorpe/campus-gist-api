@@ -42,8 +42,6 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  console.log('body:', req.body);
-
   // Validate Student login details
   const { error } = loginValidation.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
@@ -51,7 +49,9 @@ router.post('/login', async (req, res) => {
   // Check if student has an account
   const student = await Student.findOne({ email: req.body.email });
   if (!student)
-    return res.json({ message: 'Invalid email or password Password!!' });
+    return res
+      .status(400)
+      .json({ message: 'Invalid email or password Password!!' });
 
   // Check if student password is correct
   const validPassword = await bcrypt.compare(
@@ -60,7 +60,9 @@ router.post('/login', async (req, res) => {
   );
 
   if (!validPassword)
-    return res.json({ message: 'Invalid email and password Password!' });
+    return res
+      .status(400)
+      .json({ message: 'Invalid email and password Password!' });
 
   res.status(200).send(student);
 

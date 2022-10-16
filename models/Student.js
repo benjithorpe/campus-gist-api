@@ -11,6 +11,7 @@ const studentSchema = new Schema({
   username: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
     min: 2,
     max: 20,
@@ -22,6 +23,7 @@ const studentSchema = new Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
     min: 6,
     max: 255,

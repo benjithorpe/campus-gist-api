@@ -7,7 +7,7 @@ const router = Router();
 // Get all gists
 router.get('/', async (req, res) => {
   const gists = await Gist.find()
-    .populate('author', 'fullname username image')
+    .populate('author', 'fullname username image email')
     .sort('-datePosted');
 
   if (!gists) return res.send({ error: 'No gists found' });
@@ -31,10 +31,9 @@ router.post('/', async (req, res) => {
 
 // Get a gist
 router.get('/:id', async (req, res) => {
-  const gist = await Gist.findById(req.params.id).populate(
-    'author',
-    'fullname username image',
-  );
+  const gist = await Gist.findById(req.params.id)
+    .populate('author', 'fullname username image email')
+    .populate('comments');
 
   // Return Error if no gist was found...
   if (!gist) return res.send({ error: 'Gist was not found' });

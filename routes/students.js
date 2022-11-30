@@ -6,7 +6,7 @@ const router = Router();
 // Get all students
 router.get('/', async (req, res) => {
   // Get all students without displaying their passwords
-  const students = await Student.find().select('-password');
+  const students = await Student.find().select('-password -__v');
 
   if (!students) return res.send({ error: 'No students found' });
 

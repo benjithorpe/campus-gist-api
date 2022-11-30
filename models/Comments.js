@@ -9,6 +9,10 @@ const commentSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  // post: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Gist',
+  // },
   author: {
     type: Schema.Types.ObjectId,
     ref: 'Student',

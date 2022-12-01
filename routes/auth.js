@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
-// const jwt = require('jsonwebtoken');
+
 import Student from '../models/Student.js';
 import { registerValidation, loginValidation } from '../utils/validate.js';
+import { generateAuthToken } from '../utils/auth.js';
 
 const router = Router();
 
@@ -37,7 +38,7 @@ router.post('/register', async (req, res) => {
     const newStudent = await student.save();
     res.send(newStudent);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error });
   }
 });
 
@@ -62,13 +63,24 @@ router.post('/login', async (req, res) => {
   if (!validPassword)
     return res
       .status(400)
-      .json({ message: 'Invalid email and password Password!' });
+      .json({ message: 'Invalid email or password Password!' });
 
-  res.status(200).send(student);
+  // Generate new JWT (JSON Web Token)
+  const token = generateAuthToken({
+    _id: student._id,
+    fullname: student.fullname,
+    username: student.username,
+    isAdmin: student.isAdmin,
+  });
 
-  // Create and assign new JWT to the user
-  // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
-  // res.header('auth-token', token).send(token);
+  // Set the token as request header and send some student data
+  res.header('x-auth-token', token).send({
+    _id: student._id,
+    fullname: student.fullname,
+    username: student.username,
+    email: student.email,
+    isAdmin: student.isAdmin,
+  });
 });
 
 export default router;

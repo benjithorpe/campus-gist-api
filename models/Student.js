@@ -52,7 +52,12 @@ const studentSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  gists: [{ type: Schema.Types.ObjectId, ref: 'Gist' }],
+  // gists: [
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: 'Gist',
+  //   },
+  // ],
 });
 
 export default model('Student', studentSchema);

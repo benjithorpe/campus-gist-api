@@ -18,7 +18,12 @@ const gistSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Student',
   },
-  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
 });
 
 export default model('Gist', gistSchema);

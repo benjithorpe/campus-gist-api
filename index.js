@@ -23,8 +23,6 @@ connect(process.env.DATABASE_URL, () => console.log('Connected...'));
 // Middlewares
 app.use(express.json());
 app.use(cors({ origin: '*' }));
-
-// Routes Middlewares
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/gists', gistRoutes);

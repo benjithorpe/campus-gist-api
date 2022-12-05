@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import auth from '../middlewares/auth.js';
 
 import Comment from '../models/Comments.js';
 
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 // Create new comment
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const comment = new Comment(req.body);
 
   // TODO: get the current author and save it as the gist's author
@@ -42,7 +43,7 @@ router.post('/', async (req, res) => {
 // });
 
 // Delete comment
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     await Comment.deleteOne({ _id: req.params.id });
     res.send({ message: 'Comment was deleted...' });

@@ -6,7 +6,7 @@ import auth from '../middlewares/auth.js';
 const router = Router();
 
 // Get all gists
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   const gists = await Gist.find()
     .populate('author', 'fullname username image email')
     .sort('-datePosted');
@@ -17,11 +17,11 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Create new gist
-router.post('/', auth, async (req, res) => {
+router.post('/', async (req, res) => {
   const gist = new Gist(req.body);
   // TODO: get the current Student from request and save it as the gist's author
-  gist.author = req.user._id;
-  console.log(gist);
+  // gist.author = req.user._id;
+  // console.log(gist);
 
   try {
     const saved = await gist.save();
@@ -44,7 +44,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update gist
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', async (req, res) => {
   const gist = await Gist.findById(req.params.id).populate(
     'author',
     'fullname username image',
@@ -66,7 +66,7 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // Delete gist
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     await Gist.deleteOne({ _id: req.params.id });
     res.send({ message: 'Gist was deleted...' });
